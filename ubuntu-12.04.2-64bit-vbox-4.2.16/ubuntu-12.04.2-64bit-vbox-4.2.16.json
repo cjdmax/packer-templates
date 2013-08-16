@@ -1,0 +1,62 @@
+{
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": [
+        "scripts/base.sh",
+        "scripts/vagrant.sh",
+        "scripts/virtualbox.sh",
+        "scripts/ruby.sh",
+        "scripts/puppet.sh",
+        "scripts/cleanup-virtualbox.sh",
+        "scripts/zerodisk.sh",
+        "scripts/cleanup.sh"
+      ],
+      "override": {
+        "virtualbox": {
+          "execute_command": "echo 'vagrant'|sudo -S bash '{{.Path}}'"
+        }
+      }
+    }
+  ],
+  "builders": [
+    {
+    "type": "virtualbox",
+    "boot_command": [
+      "<esc><esc><enter><wait>",
+      "/install/vmlinuz noapic ",
+      "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
+      "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
+      "hostname=precise64 ",
+      "domain=ubuntu.local ",
+      "fb=false debconf/frontend=noninteractive ",
+      "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
+      "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
+      "initrd=/install/initrd.gz -- ",
+      "<enter>" 
+    ],
+    "boot_wait": "10s",
+    "disk_size": 10140,
+    "guest_os_type": "Ubuntu_64",
+    "http_directory": "http",
+    "iso_checksum": "af5f788aee1b32c4b2634734309cc9e9",
+    "iso_checksum_type": "md5",
+    "iso_url": "http://releases.ubuntu.com/precise/ubuntu-12.04.2-server-amd64.iso",
+    "ssh_username": "vagrant",
+    "ssh_password": "vagrant",
+    "ssh_wait_timeout": "10000s",
+    "ssh_port": 22,
+    "headless": true,
+    "guest_additions_url": "http://download.virtualbox.org/virtualbox/4.2.16/VBoxGuestAdditions_4.2.16.iso",
+    "guest_additions_sha256": "cf2b0722da984a5f41a7814ee288262cbdf4c785630b2a7726c3daa6c5caa0c5",
+    "virtualbox_version_file": ".vbox_version",
+    "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'"
+    }
+  ],
+  "post-processors": [
+        {
+            "type": "vagrant",
+            "output": "ubuntu-12.04.2-64bit-vbox-4.2.16.box"
+        }
+    ]
+}

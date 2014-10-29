@@ -7,7 +7,7 @@
       "/install/vmlinuz noapic ",
       "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
       "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
-      "hostname=precisepangolin64 ",
+      "hostname=precise64 ",
       "domain=ubuntu.local ",
       "fb=false debconf/frontend=noninteractive ",
       "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",

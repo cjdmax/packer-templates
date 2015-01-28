@@ -11,7 +11,7 @@ apt-get -y update
 
 # Execute apt-get update.
 echo "Executing apt-get upgrade"
-apt-get -y upgrade
+apt-get -yq upgrade
 
 # Install dependencies for later scripts.
 echo "Installing dependencies"

@@ -7,11 +7,11 @@ date > /etc/vagrant_box_build_time
 
 # Execute apt-get update.
 echo "Executing apt-get update"
-apt-get -y update
+apt-get -yq update
 
 # Execute apt-get upgrade.
 echo "Executing apt-get upgrade"
-apt-get -y upgrade
+apt-get -yq upgrade
 
 # Install dependencies for later scripts.
 echo "Installing dependencies"

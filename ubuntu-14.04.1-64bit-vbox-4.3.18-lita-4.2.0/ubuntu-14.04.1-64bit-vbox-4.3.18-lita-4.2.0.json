@@ -1,0 +1,67 @@
+{
+  "builders": [
+    {
+    "type": "virtualbox-iso",
+    "boot_command": [
+      "<esc><esc><enter><wait>",
+      "/install/vmlinuz noapic ",
+      "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
+      "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
+      "hostname=trusty64 ",
+      "domain=ubuntu.local ",
+      "fb=false debconf/frontend=noninteractive ",
+      "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
+      "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
+      "initrd=/install/initrd.gz -- ",
+      "<enter>" 
+    ],
+    "boot_wait": "10s",
+    "disk_size": 10140,
+    "guest_os_type": "Ubuntu_64",
+    "http_directory": "http",
+    "iso_checksum": "ca2531b8cd79ea5b778ede3a524779b9",
+    "iso_checksum_type": "md5",
+    "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.1-server-amd64.iso",
+    "ssh_username": "vagrant",
+    "ssh_password": "vagrant",
+    "ssh_wait_timeout": "10000s",
+    "ssh_port": 22,
+    "headless": true,
+    "guest_additions_url": "http://download.virtualbox.org/virtualbox/4.3.18/VBoxGuestAdditions_4.3.18.iso",
+    "guest_additions_sha256": "e5b425ec4f6a62523855c3cbd3975d17f962f27df093d403eab27c0e7f71464a",
+    "virtualbox_version_file": ".vbox_version",
+    "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "tests",
+      "destination": "/tmp"
+    }, {
+      "type": "shell",
+      "execute_command": "echo 'vagrant'|sudo -S bash '{{.Path}}'",
+      "scripts": [
+        "scripts/base.sh",
+        "scripts/vagrant.sh",
+        "scripts/virtualbox.sh",
+        "scripts/lita.sh",
+        "scripts/cleanup-virtualbox.sh",
+        "scripts/zerodisk.sh",
+        "scripts/cleanup.sh",
+        "scripts/serverspec.sh"
+      ],
+      "override": {
+        "virtualbox-iso": {
+          "execute_command": "echo 'vagrant'|sudo -S bash '{{.Path}}'"
+        }
+      }
+    }
+  ],
+  "post-processors": [
+        {
+            "type": "vagrant",
+	          "output": "ubuntu-14.04.1-64bit-vbox-4.3.18-lita-4.2.0.box"
+        }
+    ]
+}
